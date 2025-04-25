@@ -5,6 +5,7 @@ interface DemoUser {
   id: string;
   email: string;
   name: string;
+  role: 'host' | 'guest';
 }
 
 interface AuthContextType {
@@ -16,10 +17,18 @@ interface AuthContextType {
 
 const DemoAuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const DEMO_USER = {
+const DEMO_HOST = {
   id: "demo-123",
   email: "demo@shaadihub.com",
-  name: "Demo User"
+  name: "Demo Host",
+  role: "host" as const
+};
+
+const DEMO_GUEST = {
+  id: "guest-123",
+  email: "guest@shaadihub.com",
+  name: "Demo Guest",
+  role: "guest" as const
 };
 
 export const DemoAuthProvider = ({ children }: { children: React.ReactNode }) => {
@@ -34,8 +43,11 @@ export const DemoAuthProvider = ({ children }: { children: React.ReactNode }) =>
 
   const login = (email: string, password: string) => {
     if (email === "demo@shaadihub.com" && password === "demo123") {
-      setUser(DEMO_USER);
-      localStorage.setItem('demoUser', JSON.stringify(DEMO_USER));
+      setUser(DEMO_HOST);
+      localStorage.setItem('demoUser', JSON.stringify(DEMO_HOST));
+    } else if (email === "guest@shaadihub.com" && password === "guest123") {
+      setUser(DEMO_GUEST);
+      localStorage.setItem('demoUser', JSON.stringify(DEMO_GUEST));
     }
   };
 

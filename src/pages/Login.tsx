@@ -3,6 +3,7 @@ import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
 import { useDemoAuth } from '@/contexts/DemoAuthContext';
 import { toast } from 'sonner';
 
@@ -10,8 +11,8 @@ const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { login } = useDemoAuth();
-  const [email, setEmail] = React.useState('demo@shaadihub.com');
-  const [password, setPassword] = React.useState('demo123');
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,7 +39,7 @@ const Login = () => {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="demo@shaadihub.com"
+              placeholder="Enter your email"
             />
           </div>
           
@@ -51,7 +52,7 @@ const Login = () => {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="demo123"
+              placeholder="Enter your password"
             />
           </div>
           
@@ -60,10 +61,23 @@ const Login = () => {
           </Button>
         </form>
 
-        <div className="text-center text-sm text-muted-foreground">
-          <p>Demo Credentials:</p>
-          <p>Email: demo@shaadihub.com</p>
-          <p>Password: demo123</p>
+        <div className="space-y-4">
+          <Separator />
+          <div className="text-center text-sm">
+            <p className="font-medium text-muted-foreground mb-2">Demo Credentials</p>
+            <div className="space-y-2">
+              <div className="p-2 rounded bg-muted/50">
+                <p className="font-medium text-shaadi-maroon">Host Account:</p>
+                <p>Email: demo@shaadihub.com</p>
+                <p>Password: demo123</p>
+              </div>
+              <div className="p-2 rounded bg-muted/50">
+                <p className="font-medium text-shaadi-maroon">Guest Account:</p>
+                <p>Email: guest@shaadihub.com</p>
+                <p>Password: guest123</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

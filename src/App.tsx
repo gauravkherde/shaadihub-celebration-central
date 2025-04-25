@@ -8,9 +8,16 @@ import { DemoAuthProvider } from "./contexts/DemoAuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Index from "./pages/Index";
 import EventDashboard from "./pages/EventDashboard";
+import GuestDashboard from "./pages/GuestDashboard";
 import CreateEvent from "./pages/CreateEvent";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/Login";
+import { useDemoAuth } from "./contexts/DemoAuthContext";
+
+const DashboardRouter = () => {
+  const { user } = useDemoAuth();
+  return user?.role === 'host' ? <EventDashboard /> : <GuestDashboard />;
+};
 
 const queryClient = new QueryClient();
 
@@ -37,7 +44,7 @@ const App = () => (
               path="/events/dashboard" 
               element={
                 <ProtectedRoute>
-                  <EventDashboard />
+                  <DashboardRouter />
                 </ProtectedRoute>
               } 
             />
