@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,6 +62,19 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				// ShaadiHub custom colors
+				shaadi: {
+					red: '#D62839',
+					orange: '#F77F00',
+					gold: '#FCBF49',
+					maroon: '#8E1F2F',
+					purple: '#724E91',
+					green: '#3A7D44',
+					blue: '#1C6E8C',
+					cream: '#FCF6ED',
+					light: '#FFF1E6',
+					dark: '#2A0800',
 				}
 			},
 			borderRadius: {
@@ -84,11 +98,30 @@ export default {
 					to: {
 						height: '0'
 					}
-				}
+				},
+				'float': {
+					'0%, 100%': { transform: 'translateY(0)' },
+					'50%': { transform: 'translateY(-5px)' }
+				},
+				'shimmer': {
+					'0%': { backgroundPosition: '-200% 0' },
+					'100%': { backgroundPosition: '200% 0' },
+				},
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'float': 'float 6s ease-in-out infinite',
+				'shimmer': 'shimmer 3s linear infinite',
+			},
+			fontFamily: {
+				'display': ['Poppins', 'sans-serif'],
+				'body': ['Roboto', 'sans-serif'],
+			},
+			backgroundImage: {
+				'pattern': "url('/pattern.svg')",
+				'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+				'gold-shimmer': 'linear-gradient(90deg, transparent, rgba(252, 191, 73, 0.6), transparent)',
 			}
 		}
 	},
