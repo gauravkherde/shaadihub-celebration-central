@@ -1,13 +1,55 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Calendar, Users, MessageSquare, Image, Clock } from 'lucide-react';
+import { 
+  Calendar, Users, MessageSquare, Image, Clock, 
+  Edit, MapPin, Check, Bell, Music, CheckCheck, Star 
+} from 'lucide-react';
+import { 
+  demoGuests, demoSchedule, demoTasks, demoNotifications, 
+  demoWeatherData 
+} from '@/data/demoData';
+
+// Import dashboard components
+import GuestList from '@/components/dashboard/GuestList';
+import ScheduleView from '@/components/dashboard/ScheduleView';
+import ChannelMessages from '@/components/dashboard/ChannelMessages';
+import GalleryView from '@/components/dashboard/GalleryView';
+import TaskManagement from '@/components/dashboard/TaskManagement';
+import MapView from '@/components/dashboard/MapView';
+import VendorCoordination from '@/components/dashboard/VendorCoordination';
+
+// Modal component for simple interaction demonstrations
+const DemoModal = ({ isOpen, onClose, title, children }: { 
+  isOpen: boolean; 
+  onClose: () => void; 
+  title: string;
+  children: React.ReactNode;
+}) => {
+  if (!isOpen) return null;
+  
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50" onClick={onClose}>
+      <div className="bg-background rounded-lg shadow-lg max-w-lg w-full max-h-[80vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
+        <div className="p-4 border-b flex justify-between items-center">
+          <h3 className="font-medium">{title}</h3>
+          <Button variant="ghost" size="sm" onClick={onClose}>Close</Button>
+        </div>
+        <div className="p-4">
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const EventDashboard = () => {
+  const [activeModal, setActiveModal] = useState<string | null>(null);
+  
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -18,6 +60,7 @@ const EventDashboard = () => {
             <p className="text-muted-foreground">December 12-15, 2025 • Delhi, India</p>
           </div>
           <Button className="bg-shaadi-red hover:bg-shaadi-maroon">
+            <Edit className="mr-2 h-4 w-4" />
             Edit Event
           </Button>
         </div>
@@ -62,12 +105,14 @@ const EventDashboard = () => {
         </div>
 
         <Tabs defaultValue="overview" className="mb-8">
-          <TabsList className="grid grid-cols-5 md:w-fit mb-4">
+          <TabsList className="grid grid-cols-6 sm:grid-cols-7 md:w-fit mb-4 overflow-x-auto">
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="guests">Guests</TabsTrigger>
             <TabsTrigger value="schedule">Schedule</TabsTrigger>
             <TabsTrigger value="channels">Channels</TabsTrigger>
             <TabsTrigger value="gallery">Gallery</TabsTrigger>
+            <TabsTrigger value="vendors">Vendors</TabsTrigger>
+            <TabsTrigger value="map">Map</TabsTrigger>
           </TabsList>
           
           <TabsContent value="overview" className="space-y-6">
@@ -86,18 +131,21 @@ const EventDashboard = () => {
                       Upcoming Activities
                     </h3>
                     <ul className="space-y-3">
-                      <li className="border-l-2 border-shaadi-red pl-3 py-1">
-                        <p className="font-medium">Mehndi Ceremony</p>
-                        <p className="text-sm text-muted-foreground">Dec 12, 2025 • 4:00 PM</p>
-                      </li>
-                      <li className="border-l-2 border-shaadi-orange pl-3 py-1">
-                        <p className="font-medium">Sangeet Night</p>
-                        <p className="text-sm text-muted-foreground">Dec 13, 2025 • 7:00 PM</p>
-                      </li>
-                      <li className="border-l-2 border-shaadi-gold pl-3 py-1">
-                        <p className="font-medium">Wedding Ceremony</p>
-                        <p className="text-sm text-muted-foreground">Dec 14, 2025 • 9:00 PM</p>
-                      </li>
+                      {demoSchedule.slice(0, 3).map((event, index) => (
+                        <li key={index} className={`border-l-2 ${
+                          index === 0 ? 'border-shaadi-red' : 
+                          index === 1 ? 'border-shaadi-orange' :
+                          'border-shaadi-gold'
+                        } pl-3 py-1`}>
+                          <p className="font-medium">{event.title}</p>
+                          <p className="text-sm text-muted-foreground">
+                            {new Date(event.date).toLocaleDateString('en-US', { 
+                              month: 'short', 
+                              day: 'numeric'
+                            })} • {event.time}
+                          </p>
+                        </li>
+                      ))}
                     </ul>
                   </div>
                   <div>
@@ -119,6 +167,52 @@ const EventDashboard = () => {
                     </ul>
                   </div>
                 </div>
+                
+                <div className="mt-6 border-t pt-6">
+                  <h3 className="font-medium mb-3 flex items-center gap-2">
+                    <Bell className="h-4 w-4 text-shaadi-gold" />
+                    Recent Notifications
+                  </h3>
+                  <ul className="space-y-2">
+                    {demoNotifications.slice(0, 3).map((notification) => (
+                      <li key={notification.id} className="flex items-start py-2 border-b last:border-0">
+                        <div className={`shrink-0 w-2 h-2 mt-2 rounded-full ${notification.read ? 'bg-muted-foreground' : 'bg-shaadi-red'}`}></div>
+                        <div className="ml-3">
+                          <p className="font-medium text-sm">{notification.title}</p>
+                          <p className="text-xs text-muted-foreground">{notification.message}</p>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                
+                <div className="mt-6 border-t pt-6">
+                  <h3 className="font-medium mb-3 flex items-center gap-2">
+                    <MapPin className="h-4 w-4 text-shaadi-maroon" />
+                    Venue Weather
+                  </h3>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    {demoWeatherData.map((day, index) => (
+                      <div key={index} className="bg-muted/30 p-3 rounded-md text-center">
+                        <p className="text-xs text-muted-foreground">{new Date(day.date).toLocaleDateString('en-US', { 
+                          month: 'short', 
+                          day: 'numeric'
+                        })}</p>
+                        <div className="my-2">
+                          {day.icon === 'sun' ? (
+                            <div className="w-8 h-8 mx-auto bg-yellow-500 rounded-full"></div>
+                          ) : day.icon === 'cloud-sun' ? (
+                            <div className="w-8 h-8 mx-auto bg-gradient-to-b from-yellow-500 to-gray-300 rounded-full"></div>
+                          ) : (
+                            <div className="w-8 h-8 mx-auto bg-gray-300 rounded-full"></div>
+                          )}
+                        </div>
+                        <p className="font-medium">{day.temperature}</p>
+                        <p className="text-xs">{day.forecast}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </CardContent>
               <CardFooter className="border-t pt-6">
                 <Button variant="outline" className="w-full">View All Details</Button>
@@ -126,129 +220,145 @@ const EventDashboard = () => {
             </Card>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <TaskManagement />
+              
               <Card>
                 <CardHeader>
                   <CardTitle className="text-lg">Quick Actions</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2">
-                  <Button variant="outline" className="w-full justify-start">
+                  <Button variant="outline" className="w-full justify-start" onClick={() => setActiveModal('guests')}>
                     <Users className="mr-2 h-4 w-4" />
                     Add New Guests
                   </Button>
-                  <Button variant="outline" className="w-full justify-start">
+                  <Button variant="outline" className="w-full justify-start" onClick={() => setActiveModal('schedule')}>
                     <Clock className="mr-2 h-4 w-4" />
                     Update Schedule
                   </Button>
-                  <Button variant="outline" className="w-full justify-start">
+                  <Button variant="outline" className="w-full justify-start" onClick={() => setActiveModal('announcement')}>
                     <MessageSquare className="mr-2 h-4 w-4" />
                     Send Announcement
                   </Button>
-                  <Button variant="outline" className="w-full justify-start">
+                  <Button variant="outline" className="w-full justify-start" onClick={() => setActiveModal('photos')}>
                     <Image className="mr-2 h-4 w-4" />
                     Upload Photos
                   </Button>
+                  <Button variant="outline" className="w-full justify-start" onClick={() => setActiveModal('checkin')}>
+                    <Check className="mr-2 h-4 w-4" />
+                    Manage Check-ins
+                  </Button>
+                  <Button variant="outline" className="w-full justify-start" onClick={() => setActiveModal('music')}>
+                    <Music className="mr-2 h-4 w-4" />
+                    Update Playlist
+                  </Button>
+                  <Button variant="outline" className="w-full justify-start" onClick={() => setActiveModal('feedback')}>
+                    <Star className="mr-2 h-4 w-4" />
+                    Request Feedback
+                  </Button>
+                  <Button variant="outline" className="w-full justify-start" onClick={() => setActiveModal('rsvps')}>
+                    <CheckCheck className="mr-2 h-4 w-4" />
+                    Manage RSVPs
+                  </Button>
                 </CardContent>
-              </Card>
-              
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Tasks</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="flex items-center space-x-3">
-                      <input type="checkbox" className="rounded border-shaadi-gold/50 text-shaadi-orange" />
-                      <span>Finalize menu with caterer</span>
-                    </div>
-                    <div className="flex items-center space-x-3">
-                      <input type="checkbox" className="rounded border-shaadi-gold/50 text-shaadi-orange" />
-                      <span>Confirm flowers for mandap decoration</span>
-                    </div>
-                    <div className="flex items-center space-x-3">
-                      <input type="checkbox" className="rounded border-shaadi-gold/50 text-shaadi-orange" />
-                      <span>Follow up with DJ for playlist</span>
-                    </div>
-                    <div className="flex items-center space-x-3">
-                      <input type="checkbox" className="rounded border-shaadi-gold/50 text-shaadi-orange" />
-                      <span>Send reminder to guests for RSVP</span>
-                    </div>
-                  </div>
-                </CardContent>
-                <CardFooter className="border-t pt-4">
-                  <Button variant="ghost" className="w-full">Add Task</Button>
-                </CardFooter>
               </Card>
             </div>
           </TabsContent>
           
           <TabsContent value="guests">
-            <Card>
-              <CardHeader>
-                <CardTitle>Guest Management</CardTitle>
-                <CardDescription>
-                  Manage your guest list, send invitations, and track RSVPs.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground mb-6">This section will display your full guest list with RSVP status.</p>
-                <div className="border rounded-md p-4 text-center">
-                  <p>Guest list details will appear here</p>
-                </div>
-              </CardContent>
-            </Card>
+            <GuestList />
           </TabsContent>
           
           <TabsContent value="schedule">
-            <Card>
-              <CardHeader>
-                <CardTitle>Event Schedule</CardTitle>
-                <CardDescription>
-                  Manage and share your event timeline.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground mb-6">This section will display your event schedule.</p>
-                <div className="border rounded-md p-4 text-center">
-                  <p>Schedule details will appear here</p>
-                </div>
-              </CardContent>
-            </Card>
+            <ScheduleView />
           </TabsContent>
           
           <TabsContent value="channels">
-            <Card>
-              <CardHeader>
-                <CardTitle>Topic Channels</CardTitle>
-                <CardDescription>
-                  Organize conversations by topic for better communication.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground mb-6">This section will display your topic channels.</p>
-                <div className="border rounded-md p-4 text-center">
-                  <p>Channel list and conversations will appear here</p>
-                </div>
-              </CardContent>
-            </Card>
+            <ChannelMessages />
           </TabsContent>
           
           <TabsContent value="gallery">
-            <Card>
-              <CardHeader>
-                <CardTitle>Photo Gallery</CardTitle>
-                <CardDescription>
-                  Collect and share photos from all your events.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground mb-6">This section will display your photo gallery.</p>
-                <div className="border rounded-md p-4 text-center">
-                  <p>Photos will appear here</p>
-                </div>
-              </CardContent>
-            </Card>
+            <GalleryView />
+          </TabsContent>
+          
+          <TabsContent value="vendors">
+            <VendorCoordination />
+          </TabsContent>
+          
+          <TabsContent value="map">
+            <MapView />
           </TabsContent>
         </Tabs>
+        
+        {/* Demo Modals */}
+        <DemoModal 
+          isOpen={activeModal === 'guests'} 
+          onClose={() => setActiveModal(null)}
+          title="Add New Guests"
+        >
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium mb-1">Name</label>
+              <input type="text" className="w-full p-2 border rounded" placeholder="Guest name" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Email</label>
+              <input type="email" className="w-full p-2 border rounded" placeholder="Email address" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Phone Number</label>
+              <input type="tel" className="w-full p-2 border rounded" placeholder="+91 98765 43210" />
+            </div>
+            <div className="flex justify-end">
+              <Button className="bg-shaadi-red hover:bg-shaadi-maroon">Add Guest</Button>
+            </div>
+          </div>
+        </DemoModal>
+        
+        <DemoModal 
+          isOpen={activeModal === 'announcement'} 
+          onClose={() => setActiveModal(null)}
+          title="Send Announcement"
+        >
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium mb-1">Select Channel</label>
+              <select className="w-full p-2 border rounded">
+                <option>All Guests</option>
+                <option>#Travel</option>
+                <option>#Food</option>
+                <option>#Decoration</option>
+                <option>#Accommodation</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Message</label>
+              <textarea className="w-full p-2 border rounded h-32" placeholder="Type your announcement here..."></textarea>
+            </div>
+            <div className="flex justify-end">
+              <Button className="bg-shaadi-red hover:bg-shaadi-maroon">Send to All Guests</Button>
+            </div>
+          </div>
+        </DemoModal>
+        
+        <DemoModal 
+          isOpen={!!activeModal && !['guests', 'announcement'].includes(activeModal)} 
+          onClose={() => setActiveModal(null)}
+          title="Feature Preview"
+        >
+          <div className="text-center py-8">
+            <div className="mx-auto w-16 h-16 bg-shaadi-red/10 rounded-full flex items-center justify-center mb-4">
+              <Bell className="h-8 w-8 text-shaadi-red" />
+            </div>
+            <h3 className="text-xl font-bold mb-2">Feature Demo</h3>
+            <p className="text-muted-foreground">
+              This is a demo of the {activeModal} feature. In a full implementation, you would be able to 
+              interact with and manage this feature here.
+            </p>
+            <Button className="mt-6 bg-shaadi-red hover:bg-shaadi-maroon">
+              Great, Got It!
+            </Button>
+          </div>
+        </DemoModal>
       </div>
       <div className="mt-auto">
         <Footer />

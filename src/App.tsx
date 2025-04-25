@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { DemoAuthProvider } from "./contexts/DemoAuthContext";
+import ProtectedRoute from "./components/ProtectedRoute";
 import Index from "./pages/Index";
 import EventDashboard from "./pages/EventDashboard";
 import CreateEvent from "./pages/CreateEvent";
@@ -24,8 +25,22 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/login" element={<Login />} />
             <Route path="/events" element={<Navigate to="/events/dashboard" replace />} />
-            <Route path="/events/create" element={<CreateEvent />} />
-            <Route path="/events/dashboard" element={<EventDashboard />} />
+            <Route 
+              path="/events/create" 
+              element={
+                <ProtectedRoute>
+                  <CreateEvent />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/events/dashboard" 
+              element={
+                <ProtectedRoute>
+                  <EventDashboard />
+                </ProtectedRoute>
+              } 
+            />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
