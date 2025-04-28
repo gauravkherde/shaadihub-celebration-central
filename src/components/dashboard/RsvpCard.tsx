@@ -74,6 +74,7 @@ const RsvpCard = () => {
         </div>
       </CardContent>
       <CardFooter className="flex gap-2 justify-end">
+        {/* Fix: Only show the decline button if not already declined */}
         {user.rsvpStatus !== 'not-attending' && (
           <Button 
             variant={user.rsvpStatus === 'not-attending' ? "default" : "outline"} 
@@ -84,7 +85,7 @@ const RsvpCard = () => {
             Decline
           </Button>
         )}
-        {/* Here's the problematic line - fixing the condition */}
+        {/* Fix: Only show the attend button if not already attending */}
         {user.rsvpStatus !== 'attending' && (
           <Button 
             className="bg-primary hover:bg-primary/90"

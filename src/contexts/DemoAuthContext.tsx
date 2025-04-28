@@ -11,7 +11,7 @@ interface DemoUser {
     wifiUsername: string;
     wifiPassword: string;
   };
-  rsvpStatus?: 'attending' | 'not-attending' | 'pending';
+  rsvpStatus: 'attending' | 'not-attending' | 'pending';
 }
 
 interface AuthContextType {
@@ -28,7 +28,8 @@ const DEMO_HOST = {
   id: "demo-123",
   email: "demo@shaadihub.com",
   name: "Demo Host",
-  role: "host" as const
+  role: "host" as const,
+  rsvpStatus: "attending" as const
 };
 
 const DEMO_GUEST = {
