@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -56,10 +55,10 @@ const EventDashboard = () => {
       <div className="container py-8">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
           <div>
-            <h1 className="text-3xl font-bold">Sharma-Patel Wedding</h1>
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-primary via-secondary to-shaadi-orange inline-block text-transparent bg-clip-text">Sharma-Patel Wedding</h1>
             <p className="text-muted-foreground">December 12-15, 2025 • Delhi, India</p>
           </div>
-          <Button className="bg-shaadi-red hover:bg-shaadi-maroon">
+          <Button className="bg-gradient-to-r from-primary to-secondary hover:opacity-90">
             <Edit className="mr-2 h-4 w-4" />
             Edit Event
           </Button>
@@ -105,7 +104,7 @@ const EventDashboard = () => {
         </div>
 
         <Tabs defaultValue="overview" className="mb-8">
-          <TabsList className="grid grid-cols-6 sm:grid-cols-7 md:w-fit mb-4 overflow-x-auto">
+          <TabsList className="grid grid-cols-6 sm:grid-cols-7 md:w-fit mb-4 overflow-x-auto bg-secondary/10">
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="guests">Guests</TabsTrigger>
             <TabsTrigger value="schedule">Schedule</TabsTrigger>
@@ -116,7 +115,8 @@ const EventDashboard = () => {
           </TabsList>
           
           <TabsContent value="overview" className="space-y-6">
-            <Card>
+            <Card className="border-secondary/30 overflow-hidden">
+              <div className="h-2 bg-gradient-to-r from-primary to-secondary"></div>
               <CardHeader>
                 <CardTitle>Event Overview</CardTitle>
                 <CardDescription>

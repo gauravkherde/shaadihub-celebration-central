@@ -7,27 +7,11 @@ import { useDemoAuth } from '@/contexts/DemoAuthContext';
 import { toast } from 'sonner';
 
 const RsvpCard = () => {
-  const { user, updateUserRsvp } = useDemoAuth();
+  const { user } = useDemoAuth();
   
-  const handleRsvp = (status: 'attending' | 'not-attending') => {
-    updateUserRsvp(status);
-    
-    if (status === 'attending') {
-      toast.success('Thank you for confirming your attendance!', {
-        description: 'We look forward to celebrating with you.',
-      });
-    } else {
-      toast.info('We\'re sorry you can\'t make it.', {
-        description: 'Thank you for letting us know.',
-      });
-    }
-  };
-
-  if (!user) return null;
-
   return (
     <Card className="border-secondary/30 overflow-hidden">
-      <div className="bg-gradient-pink-gold h-3"></div>
+      <div className="bg-gradient-to-r from-primary to-secondary h-3"></div>
       <CardHeader>
         <CardTitle>RSVP Status</CardTitle>
         <CardDescription>
@@ -35,37 +19,15 @@ const RsvpCard = () => {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        {user.rsvpStatus === 'pending' ? (
-          <div className="bg-muted p-4 rounded-md flex items-center gap-3 mb-4">
-            <div className="h-10 w-10 bg-secondary/20 rounded-full flex items-center justify-center flex-shrink-0">
-              <Clock className="h-5 w-5 text-primary" />
-            </div>
-            <div>
-              <p className="font-medium">Your Response is Pending</p>
-              <p className="text-sm text-muted-foreground">Please confirm if you'll be attending the wedding.</p>
-            </div>
+        <div className="bg-muted/50 p-4 rounded-md flex items-center gap-3 mb-4">
+          <div className="h-10 w-10 bg-primary/20 rounded-full flex items-center justify-center flex-shrink-0">
+            <Clock className="h-5 w-5 text-primary" />
           </div>
-        ) : user.rsvpStatus === 'attending' ? (
-          <div className="bg-green-50 p-4 rounded-md flex items-center gap-3 mb-4">
-            <div className="h-10 w-10 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
-              <Check className="h-5 w-5 text-green-600" />
-            </div>
-            <div>
-              <p className="font-medium text-green-800">You're Attending!</p>
-              <p className="text-sm text-green-700">We look forward to celebrating with you.</p>
-            </div>
+          <div>
+            <p className="font-medium">Awaiting Your Response</p>
+            <p className="text-sm text-muted-foreground">Please confirm if you'll be attending the wedding.</p>
           </div>
-        ) : (
-          <div className="bg-red-50 p-4 rounded-md flex items-center gap-3 mb-4">
-            <div className="h-10 w-10 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0">
-              <X className="h-5 w-5 text-red-600" />
-            </div>
-            <div>
-              <p className="font-medium text-red-800">You've Declined</p>
-              <p className="text-sm text-red-700">Thanks for letting us know.</p>
-            </div>
-          </div>
-        )}
+        </div>
         
         <div className="text-sm text-muted-foreground mb-4">
           <p>Event: <span className="font-medium text-foreground">Sharma-Patel Wedding</span></p>
@@ -74,18 +36,15 @@ const RsvpCard = () => {
         </div>
       </CardContent>
       <CardFooter className="flex gap-2 justify-end">
-        {/* Simplified buttons without conditional rendering */}
         <Button 
           variant="outline" 
-          className="bg-red-50 text-red-600 border-red-200 hover:bg-red-100 hover:text-red-700"
-          onClick={() => handleRsvp('not-attending')}
+          className="bg-destructive/10 text-destructive border-destructive/20 hover:bg-destructive/20"
         >
           <X className="h-4 w-4 mr-1" />
           Decline
         </Button>
         <Button 
-          className="bg-primary hover:bg-primary/90"
-          onClick={() => handleRsvp('attending')}
+          className="bg-gradient-to-r from-primary to-secondary hover:opacity-90"
         >
           <Check className="h-4 w-4 mr-1" />
           I'll Attend

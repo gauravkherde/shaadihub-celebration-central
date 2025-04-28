@@ -13,7 +13,7 @@ export function Navbar() {
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-2">
           <Link to="/" className="flex items-center gap-2">
-            <span className="text-xl font-bold text-gradient bg-gradient-to-r from-primary via-secondary to-shaadi-orange inline-block text-transparent bg-clip-text">
+            <span className="text-xl font-bold bg-gradient-to-r from-primary via-secondary to-shaadi-orange inline-block text-transparent bg-clip-text">
               ShaadiHub
             </span>
           </Link>
