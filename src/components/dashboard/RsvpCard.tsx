@@ -84,6 +84,7 @@ const RsvpCard = () => {
             Decline
           </Button>
         )}
+        {/* Here's the problematic line - fixing the condition */}
         {user.rsvpStatus !== 'attending' && (
           <Button 
             className="bg-primary hover:bg-primary/90"
