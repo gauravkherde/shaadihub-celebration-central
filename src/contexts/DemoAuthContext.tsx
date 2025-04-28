@@ -6,6 +6,12 @@ interface DemoUser {
   email: string;
   name: string;
   role: 'host' | 'guest';
+  roomAllocation?: {
+    roomNumber: string;
+    wifiUsername: string;
+    wifiPassword: string;
+  };
+  rsvpStatus?: 'attending' | 'not-attending' | 'pending';
 }
 
 interface AuthContextType {
@@ -13,6 +19,7 @@ interface AuthContextType {
   login: (email: string, password: string) => void;
   logout: () => void;
   isAuthenticated: boolean;
+  updateUserRsvp: (status: 'attending' | 'not-attending' | 'pending') => void;
 }
 
 const DemoAuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -28,7 +35,13 @@ const DEMO_GUEST = {
   id: "guest-123",
   email: "guest@shaadihub.com",
   name: "Demo Guest",
-  role: "guest" as const
+  role: "guest" as const,
+  roomAllocation: {
+    roomNumber: "304",
+    wifiUsername: "SharmaWedding",
+    wifiPassword: "Celebrate2025!"
+  },
+  rsvpStatus: "pending" as const
 };
 
 export const DemoAuthProvider = ({ children }: { children: React.ReactNode }) => {
@@ -56,8 +69,16 @@ export const DemoAuthProvider = ({ children }: { children: React.ReactNode }) =>
     localStorage.removeItem('demoUser');
   };
 
+  const updateUserRsvp = (status: 'attending' | 'not-attending' | 'pending') => {
+    if (user) {
+      const updatedUser = { ...user, rsvpStatus: status };
+      setUser(updatedUser);
+      localStorage.setItem('demoUser', JSON.stringify(updatedUser));
+    }
+  };
+
   return (
-    <DemoAuthContext.Provider value={{ user, login, logout, isAuthenticated: !!user }}>
+    <DemoAuthContext.Provider value={{ user, login, logout, isAuthenticated: !!user, updateUserRsvp }}>
       {children}
     </DemoAuthContext.Provider>
   );

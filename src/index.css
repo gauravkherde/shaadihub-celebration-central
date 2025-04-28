@@ -16,30 +16,30 @@
     --popover: 0 0% 100%;
     --popover-foreground: 30 100% 8%;
 
-    --primary: 350 70% 50%;
+    --primary: 330 85% 60%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 30 100% 62%;
+    --secondary: 45 100% 62%;
     --secondary-foreground: 30 100% 8%;
 
     --muted: 40 30% 96%;
     --muted-foreground: 30 10% 40%;
 
-    --accent: 30 100% 62%;
+    --accent: 45 100% 62%;
     --accent-foreground: 30 100% 8%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 30 10% 90%;
-    --input: 30 10% 90%;
-    --ring: 30 100% 62%;
+    --border: 330 20% 90%;
+    --input: 330 20% 90%;
+    --ring: 45 100% 62%;
 
     --radius: 0.5rem;
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary: 330 85% 60%;
     --sidebar-primary-foreground: 0 0% 98%;
     --sidebar-accent: 240 4.8% 95.9%;
     --sidebar-accent-foreground: 240 5.9% 10%;
@@ -57,16 +57,16 @@
     --popover: 30 100% 10%;
     --popover-foreground: 40 30% 96%;
 
-    --primary: 350 70% 50%;
+    --primary: 330 85% 60%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 30 100% 30%;
+    --secondary: 45 100% 40%;
     --secondary-foreground: 0 0% 98%;
 
     --muted: 30 20% 20%;
     --muted-foreground: 30 10% 70%;
 
-    --accent: 30 100% 30%;
+    --accent: 45 100% 40%;
     --accent-foreground: 0 0% 98%;
 
     --destructive: 0 62.8% 30.6%;
@@ -74,16 +74,16 @@
 
     --border: 30 20% 30%;
     --input: 30 20% 30%;
-    --ring: 30 100% 30%;
+    --ring: 45 100% 40%;
     
     --sidebar-background: 30 100% 10%;
     --sidebar-foreground: 40 30% 96%;
-    --sidebar-primary: 350 70% 50%;
+    --sidebar-primary: 330 85% 60%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 30 20% 20%;
     --sidebar-accent-foreground: 40 30% 96%;
     --sidebar-border: 30 20% 30%;
-    --sidebar-ring: 350 70% 50%;
+    --sidebar-ring: 330 85% 60%;
   }
 }
 
@@ -101,12 +101,12 @@
   }
 
   .decorative-border {
-    @apply relative rounded-lg p-6 border border-shaadi-gold/30;
+    @apply relative rounded-lg p-6 border border-secondary/30;
   }
 
   .decorative-border::before {
     content: '';
-    @apply absolute inset-0 -top-1 -left-1 -bottom-1 -right-1 bg-gradient-to-r from-shaadi-red via-shaadi-gold to-shaadi-orange rounded-lg blur-sm -z-10 opacity-40;
+    @apply absolute inset-0 -top-1 -left-1 -bottom-1 -right-1 bg-gradient-to-r from-primary via-secondary to-orange-400 rounded-lg blur-sm -z-10 opacity-40;
   }
 
   .pattern-bg {
@@ -115,5 +115,14 @@
 }
 
 .shimmer {
-  @apply bg-gradient-to-r from-transparent via-shaadi-gold/20 to-transparent bg-[length:200%_100%] animate-shimmer;
+  @apply bg-gradient-to-r from-transparent via-secondary/20 to-transparent bg-[length:200%_100%] animate-shimmer;
 }
+
+.text-gradient {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary;
+}
+
+.bg-gradient-pink-gold {
+  @apply bg-gradient-to-r from-primary/80 to-secondary/80;
+}
+

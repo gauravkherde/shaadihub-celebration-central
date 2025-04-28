@@ -65,9 +65,8 @@ export default {
 				},
 				// ShaadiHub custom colors
 				shaadi: {
-					red: '#D62839',
-					orange: '#F77F00',
-					gold: '#FCBF49',
+					pink: '#FF83B3', // New pink color
+					gold: '#FCBF49', // Gold color
 					maroon: '#8E1F2F',
 					purple: '#724E91',
 					green: '#3A7D44',
@@ -75,6 +74,8 @@ export default {
 					cream: '#FCF6ED',
 					light: '#FFF1E6',
 					dark: '#2A0800',
+					red: '#D62839',
+					orange: '#F77F00',
 				}
 			},
 			borderRadius: {
@@ -107,12 +108,16 @@ export default {
 					'0%': { backgroundPosition: '-200% 0' },
 					'100%': { backgroundPosition: '200% 0' },
 				},
+				'ping': {
+					'75%, 100%': { transform: 'scale(2)', opacity: '0' },
+				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
 				'float': 'float 6s ease-in-out infinite',
 				'shimmer': 'shimmer 3s linear infinite',
+				'ping': 'ping 1s cubic-bezier(0, 0, 0.2, 1) infinite',
 			},
 			fontFamily: {
 				'display': ['Poppins', 'sans-serif'],
@@ -122,6 +127,7 @@ export default {
 				'pattern': "url('/pattern.svg')",
 				'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
 				'gold-shimmer': 'linear-gradient(90deg, transparent, rgba(252, 191, 73, 0.6), transparent)',
+				'pink-gold-gradient': 'linear-gradient(90deg, #FF83B3, #FCBF49)',
 			}
 		}
 	},

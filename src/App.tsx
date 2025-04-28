@@ -4,7 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { DemoAuthProvider } from "./contexts/DemoAuthContext";
+import { DemoAuthProvider, useDemoAuth } from "./contexts/DemoAuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Index from "./pages/Index";
 import EventDashboard from "./pages/EventDashboard";
@@ -12,7 +12,6 @@ import GuestDashboard from "./pages/GuestDashboard";
 import CreateEvent from "./pages/CreateEvent";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/Login";
-import { useDemoAuth } from "./contexts/DemoAuthContext";
 
 const DashboardRouter = () => {
   const { user } = useDemoAuth();
