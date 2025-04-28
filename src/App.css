@@ -1,3 +1,4 @@
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -12,10 +13,7 @@
   transition: filter 300ms;
 }
 .logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+  filter: drop-shadow(0 0 2em rgba(255,131,179,0.7));
 }
 
 @keyframes logo-spin {
@@ -35,8 +33,50 @@
 
 .card {
   padding: 2em;
+  border-radius: 0.8rem;
+  border: 1px solid rgba(252, 191, 73, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.card:hover {
+  border-color: rgba(255, 131, 179, 0.4);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
 
 .read-the-docs {
-  color: #888;
+  color: #FF83B3;
+}
+
+/* Pink and gold theme specific styles */
+.pink-shadow {
+  box-shadow: 0 4px 12px rgba(255, 131, 179, 0.15);
+}
+
+.gold-shadow {
+  box-shadow: 0 4px 12px rgba(252, 191, 73, 0.15);
+}
+
+.fancy-button {
+  background: linear-gradient(90deg, #FF83B3, #FCBF49);
+  color: white;
+  border: none;
+  padding: 0.6em 1.2em;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.fancy-button:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.pink-gold-gradient-text {
+  background: linear-gradient(90deg, #FF83B3, #FCBF49);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: 700;
 }

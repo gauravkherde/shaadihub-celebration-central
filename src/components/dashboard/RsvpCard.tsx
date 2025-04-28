@@ -74,27 +74,22 @@ const RsvpCard = () => {
         </div>
       </CardContent>
       <CardFooter className="flex gap-2 justify-end">
-        {/* Fix: Only show the decline button if not already declined */}
-        {user.rsvpStatus !== 'not-attending' && (
-          <Button 
-            variant={user.rsvpStatus === 'not-attending' ? "default" : "outline"} 
-            className="bg-red-50 text-red-600 border-red-200 hover:bg-red-100 hover:text-red-700"
-            onClick={() => handleRsvp('not-attending')}
-          >
-            <X className="h-4 w-4 mr-1" />
-            Decline
-          </Button>
-        )}
-        {/* Fix: Only show the attend button if not already attending */}
-        {user.rsvpStatus !== 'attending' && (
-          <Button 
-            className="bg-primary hover:bg-primary/90"
-            onClick={() => handleRsvp('attending')}
-          >
-            <Check className="h-4 w-4 mr-1" />
-            I'll Attend
-          </Button>
-        )}
+        {/* Simplified buttons without conditional rendering */}
+        <Button 
+          variant="outline" 
+          className="bg-red-50 text-red-600 border-red-200 hover:bg-red-100 hover:text-red-700"
+          onClick={() => handleRsvp('not-attending')}
+        >
+          <X className="h-4 w-4 mr-1" />
+          Decline
+        </Button>
+        <Button 
+          className="bg-primary hover:bg-primary/90"
+          onClick={() => handleRsvp('attending')}
+        >
+          <Check className="h-4 w-4 mr-1" />
+          I'll Attend
+        </Button>
       </CardFooter>
     </Card>
   );

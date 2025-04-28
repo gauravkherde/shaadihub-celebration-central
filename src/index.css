@@ -126,3 +126,65 @@
   @apply bg-gradient-to-r from-primary/80 to-secondary/80;
 }
 
+/* Enhanced pink and gold theme styles */
+.card-fancy {
+  @apply border-secondary/30 overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300;
+}
+
+.card-fancy::before {
+  content: '';
+  @apply absolute inset-0 bg-gradient-to-r from-primary/5 to-secondary/5 opacity-30;
+}
+
+.btn-gold {
+  @apply bg-secondary text-secondary-foreground hover:bg-secondary/90 shadow-md;
+}
+
+.btn-pink {
+  @apply bg-primary text-primary-foreground hover:bg-primary/90 shadow-md;
+}
+
+.gold-border {
+  @apply border border-secondary/50 rounded-md;
+}
+
+.pink-border {
+  @apply border border-primary/50 rounded-md;
+}
+
+.fancy-header {
+  @apply relative border-b border-secondary/30 pb-2 mb-4;
+}
+
+.fancy-header::after {
+  content: '';
+  @apply absolute bottom-0 left-0 w-1/4 h-0.5 bg-gradient-to-r from-primary to-secondary;
+}
+
+/* Decorative elements */
+.gold-dot {
+  @apply w-2 h-2 rounded-full bg-secondary;
+}
+
+.pink-dot {
+  @apply w-2 h-2 rounded-full bg-primary;
+}
+
+.gold-accent {
+  @apply text-secondary font-semibold;
+}
+
+.pink-accent {
+  @apply text-primary font-semibold;
+}
+
+/* Gradient backgrounds */
+.bg-pink-gold-radial {
+  background: radial-gradient(circle, rgba(255,131,179,0.2) 0%, rgba(252,191,73,0.1) 100%);
+}
+
+.bg-gold-shimmer {
+  background: linear-gradient(90deg, transparent, rgba(252,191,73,0.2), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 3s infinite linear;
+}
