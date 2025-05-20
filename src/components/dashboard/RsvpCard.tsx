@@ -3,11 +3,11 @@ import React from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Check, X, Clock } from 'lucide-react';
-import { useAuth } from '@/contexts/AuthContext';
+import { useDemoAuth } from '@/contexts/DemoAuthContext';
 import { toast } from 'sonner';
 
 const RsvpCard = () => {
-  const { user, updateUserRsvp } = useAuth();
+  const { user, updateUserRsvp } = useDemoAuth();
   
   const handleRsvp = async (status: 'attending' | 'not-attending') => {
     try {
