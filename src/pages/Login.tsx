@@ -1,31 +1,35 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { useDemoAuth } from '@/contexts/DemoAuthContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 
 const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { login } = useDemoAuth();
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
+  const { login, isLoading } = useAuth();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    login(email, password);
-    toast.success('Welcome to ShaadiHub!');
-    navigate(location.state?.from || '/events/dashboard');
+    
+    try {
+      await login(email, password);
+      navigate(location.state?.from || '/events/dashboard');
+    } catch (error) {
+      // Error is already handled in the login function
+    }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-shaadi-cream to-shaadi-light">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-pink-100 to-yellow-100">
       <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-xl">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-shaadi-maroon">Welcome to ShaadiHub</h1>
+          <h1 className="text-2xl font-bold text-pink-600">Welcome to ShaadiHub</h1>
           <p className="text-muted-foreground mt-2">Please sign in to continue</p>
         </div>
         
@@ -40,6 +44,7 @@ const Login = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email"
+              required
             />
           </div>
           
@@ -53,28 +58,40 @@ const Login = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter your password"
+              required
             />
           </div>
           
-          <Button type="submit" className="w-full bg-shaadi-red hover:bg-shaadi-maroon">
-            Sign In
+          <Button 
+            type="submit" 
+            className="w-full bg-gradient-to-r from-pink-500 to-yellow-500 hover:opacity-90"
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <span className="flex items-center">
+                <span className="mr-2 h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                Signing in...
+              </span>
+            ) : (
+              'Sign In'
+            )}
           </Button>
         </form>
 
         <div className="space-y-4">
           <Separator />
           <div className="text-center text-sm">
-            <p className="font-medium text-muted-foreground mb-2">Demo Credentials</p>
+            <p className="font-medium text-muted-foreground mb-2">Test Credentials</p>
             <div className="space-y-2">
-              <div className="p-2 rounded bg-muted/50">
-                <p className="font-medium text-shaadi-maroon">Host Account:</p>
-                <p>Email: demo@shaadihub.com</p>
-                <p>Password: demo123</p>
+              <div className="p-2 rounded bg-pink-50">
+                <p className="font-medium text-pink-600">Host Account:</p>
+                <p>Email: host@example.com</p>
+                <p>Password: password123</p>
               </div>
-              <div className="p-2 rounded bg-muted/50">
-                <p className="font-medium text-shaadi-maroon">Guest Account:</p>
-                <p>Email: guest@shaadihub.com</p>
-                <p>Password: guest123</p>
+              <div className="p-2 rounded bg-pink-50">
+                <p className="font-medium text-pink-600">Guest Account:</p>
+                <p>Email: guest@example.com</p>
+                <p>Password: password123</p>
               </div>
             </div>
           </div>

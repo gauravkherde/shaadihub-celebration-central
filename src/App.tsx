@@ -4,7 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { DemoAuthProvider, useDemoAuth } from "./contexts/DemoAuthContext";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Index from "./pages/Index";
 import EventDashboard from "./pages/EventDashboard";
@@ -13,14 +13,8 @@ import CreateEvent from "./pages/CreateEvent";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/Login";
 
-// Import additional potential routes if they exist in your app
-// import EventDetails from "./pages/EventDetails";
-// import GuestProfile from "./pages/GuestProfile";
-// import ChatPage from "./pages/ChatPage";
-// import GalleryPage from "./pages/GalleryPage";
-
 const DashboardRouter = () => {
-  const { user } = useDemoAuth();
+  const { user } = useAuth();
   return user?.role === 'host' ? <EventDashboard /> : <GuestDashboard />;
 };
 
@@ -36,7 +30,7 @@ const queryClient = new QueryClient({
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <DemoAuthProvider>
+    <AuthProvider>
       <TooltipProvider>
         <Toaster />
         <Sonner closeButton position="top-center" theme="light" />
@@ -65,20 +59,12 @@ const App = () => (
               } 
             />
             
-            {/* These routes can be implemented later */}
-            {/*
-            <Route path="/events/gallery" element={<ProtectedRoute><GalleryPage /></ProtectedRoute>} />
-            <Route path="/events/chat" element={<ProtectedRoute><ChatPage /></ProtectedRoute>} />
-            <Route path="/events/:eventId" element={<ProtectedRoute><EventDetails /></ProtectedRoute>} />
-            <Route path="/profile" element={<ProtectedRoute><GuestProfile /></ProtectedRoute>} />
-            */}
-            
             {/* Fallback route */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
       </TooltipProvider>
-    </DemoAuthProvider>
+    </AuthProvider>
   </QueryClientProvider>
 );
 
