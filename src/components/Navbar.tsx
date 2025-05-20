@@ -14,6 +14,21 @@ export function Navbar() {
     setMobileMenuOpen(!mobileMenuOpen);
   };
 
+  const handleGetStarted = () => {
+    navigate('/login');
+    setMobileMenuOpen(false);
+  };
+
+  const handleLogin = () => {
+    navigate('/login');
+    setMobileMenuOpen(false);
+  };
+
+  const handleLogout = () => {
+    logout();
+    setMobileMenuOpen(false);
+  };
+
   return (
     <header className="sticky top-0 z-50 w-full border-b border-secondary/30 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between">
@@ -27,8 +42,7 @@ export function Navbar() {
         
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-6">
-          <Link to="/#features" className="text-sm font-medium transition-colors hover:text-primary">Features</Link>
-          <Link to="/#pricing" className="text-sm font-medium transition-colors hover:text-primary">Pricing</Link>
+          <a href="#features" className="text-sm font-medium transition-colors hover:text-primary">Features</a>
           {isAuthenticated && (
             <>
               <Link to="/events/dashboard" className="text-sm font-medium transition-colors hover:text-primary">My Events</Link>
@@ -46,7 +60,13 @@ export function Navbar() {
               <Button variant="ghost" size="icon" className="mr-2">
                 <Bell className="h-5 w-5 text-primary" />
               </Button>
-              <Button variant="outline" className="border-secondary/50 hover:bg-secondary/10 hidden md:flex" onClick={() => logout()}>Logout</Button>
+              <Button 
+                variant="outline" 
+                className="border-secondary/50 hover:bg-secondary/10 hidden md:flex" 
+                onClick={handleLogout}
+              >
+                Logout
+              </Button>
               
               {/* Mobile menu button */}
               <Button variant="ghost" size="icon" className="md:hidden" onClick={toggleMobileMenu}>
@@ -55,8 +75,17 @@ export function Navbar() {
             </>
           ) : (
             <>
-              <Button variant="outline" className="border-primary/50 hover:bg-primary/10 hidden md:inline-flex" onClick={() => navigate('/login')}>Login</Button>
-              <Button className="bg-gradient-to-r from-primary to-secondary hover:opacity-90 hidden md:inline-flex" onClick={() => navigate('/login')}>
+              <Button 
+                variant="outline" 
+                className="border-primary/50 hover:bg-primary/10 hidden md:inline-flex" 
+                onClick={handleLogin}
+              >
+                Login
+              </Button>
+              <Button 
+                className="bg-gradient-to-r from-primary to-secondary hover:opacity-90 hidden md:inline-flex" 
+                onClick={handleGetStarted}
+              >
                 Get Started
               </Button>
               
@@ -73,20 +102,14 @@ export function Navbar() {
       {mobileMenuOpen && (
         <div className="md:hidden bg-background border-t border-secondary/20 py-4">
           <div className="container space-y-3">
-            <Link 
-              to="/#features" 
+            <a 
+              href="#features" 
               className="block py-2 px-4 hover:bg-secondary/10 rounded-md" 
               onClick={() => setMobileMenuOpen(false)}
             >
               Features
-            </Link>
-            <Link 
-              to="/#pricing" 
-              className="block py-2 px-4 hover:bg-secondary/10 rounded-md" 
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Pricing
-            </Link>
+            </a>
+            
             {isAuthenticated ? (
               <>
                 <Link 
@@ -114,10 +137,7 @@ export function Navbar() {
                 <Button 
                   variant="outline" 
                   className="w-full mt-4 border-secondary/50 hover:bg-secondary/10" 
-                  onClick={() => {
-                    logout();
-                    setMobileMenuOpen(false);
-                  }}
+                  onClick={handleLogout}
                 >
                   Logout
                 </Button>
@@ -128,19 +148,13 @@ export function Navbar() {
                   <Button 
                     variant="outline" 
                     className="w-full border-primary/50 hover:bg-primary/10" 
-                    onClick={() => {
-                      navigate('/login');
-                      setMobileMenuOpen(false);
-                    }}
+                    onClick={handleLogin}
                   >
                     Login
                   </Button>
                   <Button 
                     className="w-full bg-gradient-to-r from-primary to-secondary hover:opacity-90" 
-                    onClick={() => {
-                      navigate('/login');
-                      setMobileMenuOpen(false);
-                    }}
+                    onClick={handleGetStarted}
                   >
                     Get Started
                   </Button>

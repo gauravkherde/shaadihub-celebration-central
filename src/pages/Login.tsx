@@ -13,13 +13,21 @@ const Login = () => {
   const { login, isLoading } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isSignUp, setIsSignUp] = useState(false);
+  const [name, setName] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     try {
-      await login(email, password);
-      navigate(location.state?.from || '/events/dashboard');
+      if (isSignUp) {
+        // In a real app, this would call the signup function
+        toast.success('Account created successfully! Please sign in.');
+        setIsSignUp(false);
+      } else {
+        await login(email, password);
+        navigate(location.state?.from || '/events/dashboard');
+      }
     } catch (error) {
       // Error is already handled in the login function
     }
@@ -30,10 +38,28 @@ const Login = () => {
       <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-xl">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-pink-600">Welcome to ShaadiHub</h1>
-          <p className="text-muted-foreground mt-2">Please sign in to continue</p>
+          <p className="text-muted-foreground mt-2">
+            {isSignUp ? 'Create a new account' : 'Please sign in to continue'}
+          </p>
         </div>
         
         <form onSubmit={handleSubmit} className="space-y-4">
+          {isSignUp && (
+            <div>
+              <label className="block text-sm font-medium mb-1" htmlFor="name">
+                Full Name
+              </label>
+              <Input
+                id="name"
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Enter your full name"
+                required={isSignUp}
+              />
+            </div>
+          )}
+          
           <div>
             <label className="block text-sm font-medium mb-1" htmlFor="email">
               Email
@@ -70,13 +96,23 @@ const Login = () => {
             {isLoading ? (
               <span className="flex items-center">
                 <span className="mr-2 h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-                Signing in...
+                {isSignUp ? 'Creating account...' : 'Signing in...'}
               </span>
             ) : (
-              'Sign In'
+              isSignUp ? 'Create Account' : 'Sign In'
             )}
           </Button>
         </form>
+
+        <div className="text-center">
+          <button
+            type="button"
+            className="text-sm text-pink-600 hover:underline"
+            onClick={() => setIsSignUp(!isSignUp)}
+          >
+            {isSignUp ? 'Already have an account? Sign in' : 'Need an account? Sign up'}
+          </button>
+        </div>
 
         <div className="space-y-4">
           <Separator />
