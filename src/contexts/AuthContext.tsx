@@ -48,6 +48,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
+        console.log('Auth state change event:', event);
         if (event === 'SIGNED_IN' && session?.user) {
           setSupabaseUser(session.user);
           await fetchUserProfile(session.user.id);
@@ -67,15 +68,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const fetchUserProfile = async (userId: string) => {
     try {
+      console.log('Fetching profile for user ID:', userId);
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
         .eq('id', userId)
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching profile:', error);
+        throw error;
+      }
       
       if (data) {
+        console.log('Profile data:', data);
         // Get room allocation if exists
         const { data: roomData } = await supabase
           .from('room_allocations')
@@ -97,6 +103,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             }
           })
         });
+      } else {
+        console.warn('No profile found for user ID:', userId);
+        // If no profile exists, we might need to create one with defaults
+        toast.error('User profile not found. Please contact support.');
       }
     } catch (error) {
       console.error('Error fetching user profile:', error);
@@ -106,12 +116,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const login = async (email: string, password: string) => {
     try {
       setIsLoading(true);
+      console.log('Attempting login with:', email);
+      
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
       if (error) {
+        console.error('Login error:', error);
         toast.error('Login failed', {
           description: error.message
         });
@@ -119,6 +132,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
 
       if (data.user) {
+        console.log('Login successful for user:', data.user.id);
         toast.success('Welcome to ShaadiHub!');
         await fetchUserProfile(data.user.id);
       }

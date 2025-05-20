@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
+import { supabase } from '@/lib/supabase';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -15,15 +16,65 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [isSignUp, setIsSignUp] = useState(false);
   const [name, setName] = useState('');
+  const [signupLoading, setSignupLoading] = useState(false);
+
+  const handleSignUp = async () => {
+    if (!email || !password || !name) {
+      toast.error('Please fill in all fields');
+      return;
+    }
+
+    try {
+      setSignupLoading(true);
+      
+      // First create the auth user
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      if (data?.user) {
+        // Then create a profile record
+        const { error: profileError } = await supabase
+          .from('profiles')
+          .insert([
+            { 
+              id: data.user.id, 
+              name, 
+              email,
+              role: 'guest',
+              rsvp_status: 'pending'
+            }
+          ]);
+
+        if (profileError) {
+          console.error('Failed to create profile:', profileError);
+          toast.error('Account created but profile setup failed. Please contact support.');
+        } else {
+          toast.success('Account created successfully! Please sign in.');
+          setIsSignUp(false);
+          // Clear the sign-up form
+          setName('');
+        }
+      }
+    } catch (error: any) {
+      console.error('Sign up error:', error);
+      toast.error(error.message || 'Failed to create account');
+    } finally {
+      setSignupLoading(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     try {
       if (isSignUp) {
-        // In a real app, this would call the signup function
-        toast.success('Account created successfully! Please sign in.');
-        setIsSignUp(false);
+        await handleSignUp();
       } else {
         await login(email, password);
         navigate(location.state?.from || '/events/dashboard');
@@ -91,9 +142,9 @@ const Login = () => {
           <Button 
             type="submit" 
             className="w-full bg-gradient-to-r from-pink-500 to-yellow-500 hover:opacity-90"
-            disabled={isLoading}
+            disabled={isLoading || signupLoading}
           >
-            {isLoading ? (
+            {isLoading || signupLoading ? (
               <span className="flex items-center">
                 <span className="mr-2 h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
                 {isSignUp ? 'Creating account...' : 'Signing in...'}
