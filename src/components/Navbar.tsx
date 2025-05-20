@@ -24,8 +24,9 @@ export function Navbar() {
     setMobileMenuOpen(false);
   };
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
+    navigate('/');
     setMobileMenuOpen(false);
   };
 
@@ -42,7 +43,7 @@ export function Navbar() {
         
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-6">
-          <a href="#features" className="text-sm font-medium transition-colors hover:text-primary">Features</a>
+          <a href="/#features" className="text-sm font-medium transition-colors hover:text-primary">Features</a>
           {isAuthenticated && (
             <>
               <Link to="/events/dashboard" className="text-sm font-medium transition-colors hover:text-primary">My Events</Link>
@@ -103,7 +104,7 @@ export function Navbar() {
         <div className="md:hidden bg-background border-t border-secondary/20 py-4">
           <div className="container space-y-3">
             <a 
-              href="#features" 
+              href="/#features" 
               className="block py-2 px-4 hover:bg-secondary/10 rounded-md" 
               onClick={() => setMobileMenuOpen(false)}
             >

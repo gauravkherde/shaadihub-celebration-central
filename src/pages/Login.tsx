@@ -26,6 +26,7 @@ const Login = () => {
 
     try {
       setSignupLoading(true);
+      console.log('Starting signup process for:', email);
       
       // First create the auth user
       const { data, error } = await supabase.auth.signUp({
@@ -34,10 +35,14 @@ const Login = () => {
       });
 
       if (error) {
+        console.error('Sign up error:', error);
         throw error;
       }
 
+      console.log('Auth signup successful:', data);
+
       if (data?.user) {
+        console.log('Creating profile for user:', data.user.id);
         // Then create a profile record
         const { error: profileError } = await supabase
           .from('profiles')
@@ -55,6 +60,7 @@ const Login = () => {
           console.error('Failed to create profile:', profileError);
           toast.error('Account created but profile setup failed. Please contact support.');
         } else {
+          console.log('Profile created successfully');
           toast.success('Account created successfully! Please sign in.');
           setIsSignUp(false);
           // Clear the sign-up form

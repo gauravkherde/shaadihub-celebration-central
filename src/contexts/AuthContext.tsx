@@ -38,12 +38,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     // Check active session and set the user
     const getSession = async () => {
       setIsLoading(true);
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session?.user) {
-        setSupabaseUser(session.user);
-        await fetchUserProfile(session.user.id);
+      try {
+        console.log('Getting session...');
+        const { data: { session } } = await supabase.auth.getSession();
+        console.log('Session data:', session ? 'Session found' : 'No session');
+        
+        if (session?.user) {
+          setSupabaseUser(session.user);
+          await fetchUserProfile(session.user.id);
+        }
+      } catch (error) {
+        console.error('Error getting session:', error);
+      } finally {
+        setIsLoading(false);
       }
-      setIsLoading(false);
     };
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
