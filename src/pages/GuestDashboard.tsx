@@ -21,17 +21,26 @@ import EmergencyContacts from '@/components/dashboard/EmergencyContacts';
 import DigitalInvitation from '@/components/dashboard/DigitalInvitation';
 import NotificationsCard from '@/components/dashboard/NotificationsCard';
 import FeedbackForm from '@/components/dashboard/FeedbackForm';
+import CountdownTimer from '@/components/dashboard/CountdownTimer';
+import AnnouncementsCard from '@/components/dashboard/AnnouncementsCard';
 
 const GuestDashboard = () => {
   const { user } = useDemoAuth();
   
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-background pattern-bg">
       <Navbar />
-      <div className="container py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gradient">Sharma-Patel Wedding</h1>
+      <div className="container py-6 md:py-8">
+        <div className="mb-6 md:mb-8">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-primary via-secondary to-secondary inline-block text-transparent bg-clip-text">
+            Sharma-Patel Wedding
+          </h1>
           <p className="text-muted-foreground">December 12-15, 2025 • Delhi, India</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <CountdownTimer targetDate="2025-12-12" />
+          <AnnouncementsCard />
         </div>
 
         <div className="mb-6">
@@ -39,32 +48,40 @@ const GuestDashboard = () => {
         </div>
 
         <Tabs defaultValue="schedule" className="mb-8">
-          <TabsList className="grid w-full grid-cols-4 sm:grid-cols-6 md:w-fit mb-4">
-            <TabsTrigger value="schedule">
-              <Calendar className="h-4 w-4 mr-2" />
-              Schedule
-            </TabsTrigger>
-            <TabsTrigger value="messages">
-              <MessageSquare className="h-4 w-4 mr-2" />
-              Messages
-            </TabsTrigger>
-            <TabsTrigger value="gallery">
-              <Image className="h-4 w-4 mr-2" />
-              Gallery
-            </TabsTrigger>
-            <TabsTrigger value="venue">
-              <MapPin className="h-4 w-4 mr-2" />
-              Venues
-            </TabsTrigger>
-            <TabsTrigger value="accommodation">
-              <Wifi className="h-4 w-4 mr-2" />
-              Room
-            </TabsTrigger>
-            <TabsTrigger value="info">
-              <Bell className="h-4 w-4 mr-2" />
-              Info
-            </TabsTrigger>
-          </TabsList>
+          <div className="overflow-x-auto -mx-4 px-4 pb-2">
+            <TabsList className="w-full md:w-fit mb-4">
+              <TabsTrigger value="schedule" className="flex-1 md:flex-none">
+                <Calendar className="h-4 w-4 mr-2" />
+                <span className="hidden md:inline">Schedule</span>
+                <span className="md:hidden">Events</span>
+              </TabsTrigger>
+              <TabsTrigger value="messages" className="flex-1 md:flex-none">
+                <MessageSquare className="h-4 w-4 mr-2" />
+                <span className="hidden md:inline">Messages</span>
+                <span className="md:hidden">Chat</span>
+              </TabsTrigger>
+              <TabsTrigger value="gallery" className="flex-1 md:flex-none">
+                <Image className="h-4 w-4 mr-2" />
+                <span className="hidden md:inline">Gallery</span>
+                <span className="md:hidden">Photos</span>
+              </TabsTrigger>
+              <TabsTrigger value="venue" className="flex-1 md:flex-none">
+                <MapPin className="h-4 w-4 mr-2" />
+                <span className="hidden md:inline">Venues</span>
+                <span className="md:hidden">Map</span>
+              </TabsTrigger>
+              <TabsTrigger value="accommodation" className="flex-1 md:flex-none">
+                <Wifi className="h-4 w-4 mr-2" />
+                <span className="hidden md:inline">Accommodation</span>
+                <span className="md:hidden">Room</span>
+              </TabsTrigger>
+              <TabsTrigger value="info" className="flex-1 md:flex-none">
+                <Bell className="h-4 w-4 mr-2" />
+                <span className="hidden md:inline">Information</span>
+                <span className="md:hidden">Info</span>
+              </TabsTrigger>
+            </TabsList>
+          </div>
           
           <TabsContent value="schedule">
             <ScheduleView />

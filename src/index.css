@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Roboto:wght@300;400;500&display=swap');
 
 @tailwind base;
@@ -135,4 +136,83 @@
   background: linear-gradient(90deg, transparent, rgba(252,191,73,0.2), transparent);
   background-size: 200% 100%;
   animation: shimmer 3s infinite linear;
+}
+
+/* Button Styles */
+.button-pink-gold {
+  @apply relative overflow-hidden bg-gradient-to-r from-primary to-secondary text-white px-4 py-2 rounded-md font-medium transform transition-all shadow-md hover:shadow-lg active:scale-95;
+}
+
+.button-pink-gold::before {
+  content: '';
+  @apply absolute inset-0 bg-white opacity-0 transition-opacity hover:opacity-20;
+}
+
+.button-outline-gold {
+  @apply border border-secondary text-secondary bg-transparent hover:bg-secondary/10 transition-colors px-4 py-2 rounded-md font-medium;
+}
+
+.button-outline-pink {
+  @apply border border-primary text-primary bg-transparent hover:bg-primary/10 transition-colors px-4 py-2 rounded-md font-medium;
+}
+
+/* Input Styles */
+.input-fancy {
+  @apply border border-secondary/30 focus:border-secondary focus:ring-2 focus:ring-secondary/20 rounded-md p-2;
+}
+
+/* Card Styles */
+.card-wedding {
+  @apply bg-white rounded-lg border border-secondary/30 overflow-hidden shadow-md hover:shadow-lg transition-shadow;
+}
+
+.card-wedding-header {
+  @apply bg-gradient-to-r from-primary/10 to-secondary/10 p-4 border-b border-secondary/20;
+}
+
+/* Animation for shimmer */
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Media queries for responsive design */
+@screen sm {
+  .wedding-container {
+    @apply max-w-7xl mx-auto px-4;
+  }
+}
+
+/* Utility classes for wedding app specific elements */
+.wedding-divider {
+  @apply w-full h-px bg-gradient-to-r from-primary/20 via-secondary/40 to-primary/20 my-4;
+}
+
+.wedding-tag {
+  @apply inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-secondary/20 text-secondary-foreground;
+}
+
+/* Custom scrollbar for wedding theme */
+.wedding-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(252, 191, 73, 0.5) rgba(255, 255, 255, 0.1);
+}
+
+.wedding-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.wedding-scrollbar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+.wedding-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(252, 191, 73, 0.5);
+  border-radius: 10px;
 }
