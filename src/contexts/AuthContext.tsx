@@ -40,7 +40,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setIsLoading(true);
       try {
         console.log('Getting session...');
-        const { data: { session } } = await supabase.auth.getSession();
+        const { data: { session }, error } = await supabase.auth.getSession();
+        
+        if (error) {
+          console.error('Error getting session:', error);
+          return;
+        }
+        
         console.log('Session data:', session ? 'Session found' : 'No session');
         
         if (session?.user) {
@@ -77,6 +83,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const fetchUserProfile = async (userId: string) => {
     try {
       console.log('Fetching profile for user ID:', userId);
+      
+      // First check if profiles table exists
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
@@ -85,6 +93,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       if (error) {
         console.error('Error fetching profile:', error);
+        
+        if (error.code === '42P01') {
+          console.error('Profiles table does not exist');
+          toast.error('Database not properly configured. Please contact support.');
+          return;
+        }
+        
+        if (error.code === 'PGRST116') {
+          console.warn('No profile found for user ID:', userId);
+          toast.error('User profile not found. Please contact support.');
+          return;
+        }
+        
         throw error;
       }
       
@@ -111,10 +132,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             }
           })
         });
-      } else {
-        console.warn('No profile found for user ID:', userId);
-        // If no profile exists, we might need to create one with defaults
-        toast.error('User profile not found. Please contact support.');
       }
     } catch (error) {
       console.error('Error fetching user profile:', error);
@@ -133,9 +150,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       if (error) {
         console.error('Login error:', error);
-        toast.error('Login failed', {
-          description: error.message
-        });
+        
+        if (error.message.includes('Invalid login credentials')) {
+          toast.error('Invalid email or password');
+        } else if (error.message.includes('Email not confirmed')) {
+          toast.error('Please confirm your email before signing in');
+        } else {
+          toast.error('Login failed: ' + error.message);
+        }
         throw error;
       }
 

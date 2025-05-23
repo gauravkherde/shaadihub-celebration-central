@@ -24,18 +24,47 @@ const Login = () => {
       return;
     }
 
+    if (password.length < 6) {
+      toast.error('Password must be at least 6 characters long');
+      return;
+    }
+
     try {
       setSignupLoading(true);
       console.log('Starting signup process for:', email);
       
-      // First create the auth user
+      // First, check if the profiles table exists by trying to select from it
+      const { data: testData, error: testError } = await supabase
+        .from('profiles')
+        .select('id')
+        .limit(1);
+      
+      if (testError && testError.code === '42P01') {
+        console.error('Profiles table does not exist:', testError);
+        toast.error('Database not properly configured. Please contact support.');
+        return;
+      }
+      
+      // Create the auth user
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          data: {
+            name: name
+          }
+        }
       });
 
       if (error) {
         console.error('Sign up error:', error);
+        if (error.message.includes('User already registered')) {
+          toast.error('User already exists. Please try logging in instead.');
+        } else if (error.message.includes('Invalid email')) {
+          toast.error('Please enter a valid email address.');
+        } else {
+          toast.error('Sign up failed: ' + error.message);
+        }
         throw error;
       }
 
@@ -43,6 +72,7 @@ const Login = () => {
 
       if (data?.user) {
         console.log('Creating profile for user:', data.user.id);
+        
         // Then create a profile record
         const { error: profileError } = await supabase
           .from('profiles')
@@ -58,18 +88,33 @@ const Login = () => {
 
         if (profileError) {
           console.error('Failed to create profile:', profileError);
-          toast.error('Account created but profile setup failed. Please contact support.');
+          
+          if (profileError.code === '23505') {
+            toast.error('Profile already exists for this user.');
+          } else if (profileError.code === '42501') {
+            toast.error('Permission denied. Database security settings need to be configured.');
+          } else {
+            toast.error('Profile creation failed: ' + profileError.message);
+          }
         } else {
           console.log('Profile created successfully');
-          toast.success('Account created successfully! Please sign in.');
+          
+          if (data.user.email_confirmed_at) {
+            toast.success('Account created successfully! You can now sign in.');
+          } else {
+            toast.success('Account created! Please check your email to confirm your account before signing in.');
+          }
+          
           setIsSignUp(false);
           // Clear the sign-up form
           setName('');
+          setEmail('');
+          setPassword('');
         }
       }
     } catch (error: any) {
       console.error('Sign up error:', error);
-      toast.error(error.message || 'Failed to create account');
+      // Error already handled above
     } finally {
       setSignupLoading(false);
     }
@@ -140,8 +185,9 @@ const Login = () => {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your password"
+              placeholder="Enter your password (min 6 characters)"
               required
+              minLength={6}
             />
           </div>
           
