@@ -2,13 +2,27 @@
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from 'react-router-dom';
-import { useDemoAuth } from '@/contexts/DemoAuthContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { Menu, X, Bell, Calendar } from 'lucide-react';
 
 export function Navbar() {
-  const { user, logout, isAuthenticated } = useDemoAuth();
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  
+  // Safely access auth context with fallback
+  let user = null;
+  let logout = async () => {};
+  let isAuthenticated = false;
+  
+  try {
+    const authContext = useAuth();
+    user = authContext.user;
+    logout = authContext.logout;
+    isAuthenticated = authContext.isAuthenticated;
+  } catch (error) {
+    // If useAuth throws an error (not within provider), use default values
+    console.log('Auth context not available, using defaults');
+  }
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
@@ -24,8 +38,9 @@ export function Navbar() {
     setMobileMenuOpen(false);
   };
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
+    navigate('/');
     setMobileMenuOpen(false);
   };
 
@@ -42,7 +57,7 @@ export function Navbar() {
         
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-6">
-          <a href="#features" className="text-sm font-medium transition-colors hover:text-primary">Features</a>
+          <a href="/#features" className="text-sm font-medium transition-colors hover:text-primary">Features</a>
           {isAuthenticated && (
             <>
               <Link to="/events/dashboard" className="text-sm font-medium transition-colors hover:text-primary">My Events</Link>
@@ -103,7 +118,7 @@ export function Navbar() {
         <div className="md:hidden bg-background border-t border-secondary/20 py-4">
           <div className="container space-y-3">
             <a 
-              href="#features" 
+              href="/#features" 
               className="block py-2 px-4 hover:bg-secondary/10 rounded-md" 
               onClick={() => setMobileMenuOpen(false)}
             >
