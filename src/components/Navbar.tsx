@@ -6,9 +6,23 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Menu, X, Bell, Calendar } from 'lucide-react';
 
 export function Navbar() {
-  const { user, logout, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  
+  // Safely access auth context with fallback
+  let user = null;
+  let logout = async () => {};
+  let isAuthenticated = false;
+  
+  try {
+    const authContext = useAuth();
+    user = authContext.user;
+    logout = authContext.logout;
+    isAuthenticated = authContext.isAuthenticated;
+  } catch (error) {
+    // If useAuth throws an error (not within provider), use default values
+    console.log('Auth context not available, using defaults');
+  }
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
