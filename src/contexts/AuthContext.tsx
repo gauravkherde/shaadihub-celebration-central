@@ -113,14 +113,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           console.warn('No profile found for user ID:', userId);
           
           // Try to create a profile if it doesn't exist
-          const { user } = await supabase.auth.getUser();
-          if (user) {
+          const { data: userData } = await supabase.auth.getUser();
+          
+          if (userData && userData.user) {
             const { error: createError } = await supabase
               .from('profiles')
               .insert([{
-                id: user.id,
-                email: user.email,
-                name: user.user_metadata?.name || 'New User',
+                id: userData.user.id,
+                email: userData.user.email,
+                name: userData.user.user_metadata?.name || 'New User',
                 role: 'guest',
                 rsvp_status: 'pending'
               }]);
