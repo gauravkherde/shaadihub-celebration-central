@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { User as SupabaseUser } from '@supabase/supabase-js';
@@ -21,6 +20,7 @@ interface AuthContextType {
   user: UserProfile | null;
   supabaseUser: SupabaseUser | null;
   login: (email: string, password: string) => Promise<void>;
+  signup: (email: string, password: string, name: string, role: 'host' | 'guest') => Promise<void>;
   logout: () => Promise<void>;
   isAuthenticated: boolean;
   updateUserRsvp: (status: 'attending' | 'not-attending' | 'pending') => Promise<void>;
@@ -163,11 +163,47 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  const signup = async (email: string, password: string, name: string, role: 'host' | 'guest') => {
+    try {
+      setIsLoading(true);
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+      });
+      if (error) {
+        toast.error('Signup failed', { description: error.message });
+        throw error;
+      }
+      if (data.user) {
+        // Insert into profiles table
+        const { error: profileError } = await supabase.from('profiles').insert([
+          {
+            id: data.user.id,
+            email,
+            name,
+            role,
+            rsvp_status: 'pending',
+          },
+        ]);
+        if (profileError) {
+          toast.error('Profile creation failed', { description: profileError.message });
+          throw profileError;
+        }
+        toast.success('Account created successfully! Please check your email to verify your account.');
+      }
+    } catch (error) {
+      console.error('Error signing up:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <AuthContext.Provider value={{ 
       user, 
       supabaseUser,
       login, 
+      signup,
       logout, 
       isAuthenticated: !!user,
       updateUserRsvp,

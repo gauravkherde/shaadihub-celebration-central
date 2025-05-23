@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
@@ -10,26 +9,26 @@ import { toast } from 'sonner';
 const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { login, isLoading } = useAuth();
+  const { login, signup, isLoading } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isSignUp, setIsSignUp] = useState(false);
   const [name, setName] = useState('');
+  const [role, setRole] = useState<'host' | 'guest'>('guest');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     try {
       if (isSignUp) {
-        // In a real app, this would call the signup function
-        toast.success('Account created successfully! Please sign in.');
+        await signup(email, password, name, role);
         setIsSignUp(false);
       } else {
         await login(email, password);
         navigate(location.state?.from || '/events/dashboard');
       }
     } catch (error) {
-      // Error is already handled in the login function
+      // Error is already handled in the login/signup function
     }
   };
 
@@ -45,19 +44,36 @@ const Login = () => {
         
         <form onSubmit={handleSubmit} className="space-y-4">
           {isSignUp && (
-            <div>
-              <label className="block text-sm font-medium mb-1" htmlFor="name">
-                Full Name
-              </label>
-              <Input
-                id="name"
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Enter your full name"
-                required={isSignUp}
-              />
-            </div>
+            <>
+              <div>
+                <label className="block text-sm font-medium mb-1" htmlFor="name">
+                  Full Name
+                </label>
+                <Input
+                  id="name"
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Enter your full name"
+                  required={isSignUp}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1" htmlFor="role">
+                  Role
+                </label>
+                <select
+                  id="role"
+                  value={role}
+                  onChange={e => setRole(e.target.value as 'host' | 'guest')}
+                  className="w-full p-2 border rounded"
+                  required
+                >
+                  <option value="guest">Guest</option>
+                  <option value="host">Host</option>
+                </select>
+              </div>
+            </>
           )}
           
           <div>
