@@ -1,9 +1,9 @@
 
 import { createClient } from '@supabase/supabase-js';
 
-// Use environment variables if available, otherwise use demo credentials
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://larhxmriqwztvgzjszif.supabase.co';
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxhcmh4bXJpcXd6dHZnempzemlmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTk3NjgwODgsImV4cCI6MjAzNTM0NDA4OH0.LOu-5Kp1P67k_zh9Bw3Da5Jrx0-qpBIdYRYqZCBOGug';
+// Use environment variables if available, otherwise use your actual Supabase project credentials
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://duakxtwqzvsplbczxzyz.supabase.co';
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR1YWt4dHdxenZzcGxiY3p4enl6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzc2MzIzMDksImV4cCI6MjA1MzIwODMwOX0.your-anon-key-here';
 
 // Add debug information
 console.log('Supabase configuration:', {
