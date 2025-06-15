@@ -21,18 +21,24 @@ const Login = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormLoading(true);
+    console.log("Login form submitted, isSignUp:", isSignUp, "email:", email);
 
     try {
       if (isSignUp) {
+        console.log("Attempting signup...");
         await signup(email, password, name, role);
         setIsSignUp(false);
         setFormLoading(false);
+        console.log("Signup success.");
       } else {
+        console.log("Attempting login...");
         await login(email, password);
+        console.log("Login success, navigating...");
+        setFormLoading(false);
         navigate(location.state?.from || '/events/dashboard');
       }
     } catch (error) {
-      // Error is already handled in the login/signup function
+      console.error("Error during auth attempt:", error);
       setFormLoading(false);
     }
   };
@@ -160,4 +166,3 @@ const Login = () => {
 };
 
 export default Login;
-
