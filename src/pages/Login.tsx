@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
@@ -9,26 +10,30 @@ import { toast } from 'sonner';
 const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { login, signup, isLoading } = useAuth();
+  const { login, signup } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isSignUp, setIsSignUp] = useState(false);
   const [name, setName] = useState('');
   const [role, setRole] = useState<'host' | 'guest'>('guest');
+  const [formLoading, setFormLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+    setFormLoading(true);
+
     try {
       if (isSignUp) {
         await signup(email, password, name, role);
         setIsSignUp(false);
+        setFormLoading(false);
       } else {
         await login(email, password);
         navigate(location.state?.from || '/events/dashboard');
       }
     } catch (error) {
       // Error is already handled in the login/signup function
+      setFormLoading(false);
     }
   };
 
@@ -107,9 +112,9 @@ const Login = () => {
           <Button 
             type="submit" 
             className="w-full bg-gradient-to-r from-pink-500 to-yellow-500 hover:opacity-90"
-            disabled={isLoading}
+            disabled={formLoading}
           >
-            {isLoading ? (
+            {formLoading ? (
               <span className="flex items-center">
                 <span className="mr-2 h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
                 {isSignUp ? 'Creating account...' : 'Signing in...'}
@@ -125,6 +130,7 @@ const Login = () => {
             type="button"
             className="text-sm text-pink-600 hover:underline"
             onClick={() => setIsSignUp(!isSignUp)}
+            disabled={formLoading}
           >
             {isSignUp ? 'Already have an account? Sign in' : 'Need an account? Sign up'}
           </button>
@@ -154,3 +160,4 @@ const Login = () => {
 };
 
 export default Login;
+
