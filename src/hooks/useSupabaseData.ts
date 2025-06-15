@@ -17,12 +17,10 @@ export const useGuestData = () => {
       try {
         setIsLoading(true);
         
-        // If user is a host, fetch all guests for their events
-        // This assumes the host has an events table with guest relationships
+        // Fetch all guests from the guests table
         const { data, error } = await supabase
           .from('guests')
           .select('*')
-          .eq('event_id', user.id)
           .order('name');
 
         if (error) throw error;
@@ -80,7 +78,6 @@ export const useScheduleData = () => {
         const { data, error } = await supabase
           .from('events')
           .select('*')
-          .eq('host_id', user.id)
           .order('date', { ascending: true });
 
         if (error) throw error;
@@ -148,7 +145,10 @@ export const useChannelData = () => {
           (channelsData || []).map(async (channel) => {
             const { data: messagesData, error: messagesError } = await supabase
               .from('messages')
-              .select('*, profiles(name)')
+              .select(`
+                *,
+                profiles:user_id (name)
+              `)
               .eq('channel_id', channel.id)
               .order('created_at', { ascending: false })
               .limit(20);
@@ -159,7 +159,7 @@ export const useChannelData = () => {
               ...channel,
               messages: (messagesData || []).map((msg) => ({
                 id: msg.id,
-                user: msg.profiles.name,
+                user: msg.profiles?.name || 'Unknown User',
                 text: msg.content,
                 time: new Date(msg.created_at).toLocaleString(),
               })),
@@ -221,7 +221,6 @@ export const useChannelData = () => {
               {...channel, messages: [newMessage, ...channel.messages]} : channel))
           );
         }
-        // Handle other message events like UPDATE and DELETE if needed
       })
       .subscribe();
 
@@ -250,8 +249,10 @@ export const useTasksData = () => {
         
         const { data, error } = await supabase
           .from('tasks')
-          .select('*, profiles(name)')
-          .eq('event_id', user.id)
+          .select(`
+            *,
+            profiles:assigned_to (name)
+          `)
           .order('due_date');
 
         if (error) throw error;
@@ -396,3 +397,4 @@ export const useAnnouncementsData = () => {
 
   return { announcements, isLoading, error };
 };
+

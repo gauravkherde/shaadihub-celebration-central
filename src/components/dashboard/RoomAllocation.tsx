@@ -3,11 +3,11 @@ import React from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { useDemoAuth } from '@/contexts/DemoAuthContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { Wifi, MapPin, Key } from 'lucide-react';
 
 const RoomAllocation = () => {
-  const { user } = useDemoAuth();
+  const { user } = useAuth();
   const room = user?.roomAllocation;
 
   if (!room) {
@@ -25,7 +25,7 @@ const RoomAllocation = () => {
 
   return (
     <Card className="border-secondary/30 overflow-hidden">
-      <div className="bg-gradient-pink-gold h-3"></div>
+      <div className="bg-gradient-to-r from-pink-500 to-yellow-500 h-3"></div>
       <CardHeader>
         <CardTitle>Your Room Details</CardTitle>
         <CardDescription>
@@ -86,3 +86,4 @@ const RoomAllocation = () => {
 };
 
 export default RoomAllocation;
+
